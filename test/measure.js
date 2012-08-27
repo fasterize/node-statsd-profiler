@@ -93,16 +93,16 @@ describe('statsd-profiler', function(){
         });
 
         it ('should call statsd.timing for req', function (done) {
-          profiler.measure({ key : "req2", timerID: "timerID"});
-          profiler.measure({ key : "req2", timerID: "timerID2"});
+          profiler.timeStart("req2", "timerID");
+          profiler.timeStart("req2", "timerID2");
 
           setTimeout(function () {
-            profiler.measure({ key : "req2", timerID: "timerID"});
+            profiler.timeEnd("req2", "timerID");
             sinon.assert.calledWith(timing, 'req2');
           }, 10);
 
           setTimeout(function () {
-            profiler.measure({ key : "req2", timerID: "timerID2"});
+            profiler.timeEnd("req2", "timerID2");
             sinon.assert.calledWith(timing, 'req2');
             done();
           }, 15);
@@ -111,6 +111,18 @@ describe('statsd-profiler', function(){
         it('should call statsd.increment with a custom key', function () {
           profiler.increment('customKey');
           sinon.assert.calledWithExactly(increment, 'engine.metrics.html.size', 1);
+        });
+
+        it('should accept multiple StartTime and one EndTime', function () {
+          profiler.timeStart('req3');
+          setTimeout(function () {
+            profiler.timeStart('req3');
+          }, 20);
+          setTimeout(function () {
+            profiler.timeEnd('req3');
+            sinon.assert.calledWith(timing, 'req3');
+            done();
+          }, 40);
         });
       });
 
