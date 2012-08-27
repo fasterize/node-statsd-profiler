@@ -96,7 +96,7 @@ You can do that with the function `transformKey`.
 
 ```js
 function transformKey(key, [args1 , args2, ...]);
-``
+```
 
 
 Example:
@@ -112,3 +112,4 @@ Example:
   //will send
   statsd.increment("server1.test", 1);
 };
+``
