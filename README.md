@@ -1,7 +1,7 @@
 node-statsd-profiler
 ====================
 
-It's basically `node-statsd` but with strong power.
+It's a `node-statsd` library for people for whom clean code is important.
 
 #initialization
 
@@ -9,7 +9,7 @@ Note : the initialization has to be done only once.
 
 ```
 var profiler = require('statsd-profiler');
-profiler.init(stastdHost, stastdPort, [stastdconf = {}]);
+profiler.init(stastdHost, stastdPort, [stastdconf = {}, defaultSampleRate = 1, transformKey]);
 ```
 
 #same function as statsd
@@ -17,61 +17,46 @@ profiler.init(stastdHost, stastdPort, [stastdconf = {}]);
 ##increment
 
 ```js
-profiler.increment(key, [sampleRate = 1], [transformKey]);
+profiler.increment(key, [transformKeyArgs]);
 ```
 
 ##decrement
 
 ```js
-profiler.decrement(key, [sampleRate = 1], [transformKey]);
+profiler.decrement(key, [transformKeyArgs]);
 ```
 
 ##gauge
 
 ```js
-profiler.gauge(key, val, [sampleRate = 1], [transformKey]);
+profiler.gauge(key, val, [transformKeyArgs]);
 ```
 
 ##timing
 
 ```js
-profiler.timing(key, time, [sampleRate = 1], [transformKey]);
+profiler.timing(key, time, [transformKeyArgs]);
 ```
 
 ##timeStart
 
 ```js
-profiler.timeStart(key, [timeID], [sampleRate = 1], [transformKey]);
+profiler.timeStart(key, [timeID], [transformKeyArgs]);
 ```
-You can specify timeID if key is used for multiple measure concurrently.
+You can specify timeID if key is used for multiple measures concurrently.
 
 ##timeEnd
 
 ```js
-profiler.timeEnd(key, [timeID], [sampleRate = 1], [transformKey]);
+profiler.timeEnd(key, [timeID], [transformKeyArgs]);
 ```
 
-You can specify timeID if key is used for multiple measure concurrently.
-
-##measure
-
-```js
-profiler.measure(options);
-```
-
-The options are :
-
- * key : key of the metric
- * type : type of the measure (optional)
- * val : value of the metric for the gauge (optional)
- * sample_rate : sample-rate sent to statsd
- * timerID : it's the key of the time profiler. (optional)
- * transformKey : [function] modify the key sent to statsd to add a prefix, suffix... (optional)
+You can specify timeID if key is used for multiple measures concurrently.
 
 #Config file : don't pollute your source code!
 
-In the config file, you can some default parameters for your metrics.
-You can create an alias for the `key`, the default `type` of the measure and the `sample rate`.
+In the config file, specify the parameters for your metrics.
+You can create an config for each metric : with a key, a measure `type` and a `sample rate`. Each parameter is optional.
 
 For instance, in conf object.
 
@@ -106,21 +91,24 @@ and the actual call to statsd will be
 
 #transformKey : compute dynamically the key
 
-Sometimes, we have to add a prefix or a suffix to the key.
+Often, we want add a prefix or a suffix to our keys like the hostname, the server id...
 You can do that with the function `transformKey`.
+
+```js
+function transformKey(key, [args1 , args2, ...]);
+``
+
 
 Example:
 
 ```js
 
-  function inc(req, key, sampleRate) {
-    profiler.increment(key, sampleRate, function (key) {
-      return req.hostname + '.' + key;
-    }
-  })
+  profiler.transformKey = function (key, serverID) {
+    return serverID + '.' + key;
+  });
 
-  inc({host : "myhost"}, "jsError");
+  profiler.increment('test', "server1");
 
   //will send
-  statsd.increment("myhost.jsError", 1);
+  statsd.increment("server1.test", 1);
 };

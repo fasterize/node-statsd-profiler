@@ -65,11 +65,6 @@ describe('statsd-profiler', function(){
             done();
           }, 10);
         });
-
-        it ('sample-rate params should change the default sample-rate', function () {
-          profiler.count('html-parser', 0.4);
-          sinon.assert.calledWithExactly(increment, 'html-parser', 0.4);
-        });
       });
 
       describe('with a config', function () {
@@ -121,18 +116,15 @@ describe('statsd-profiler', function(){
 
       describe('customize measure' , function () {
         before(function (){
-          var simpleMeasure = profiler.increment;
 
-          profiler.increment = function (fzrequest, key) {
-            simpleMeasure(key, 1 , function (key) {
-                return fzrequest.hostname + '.' + key;
-            });
+          profiler.transformKey = function (key, req, serv) {
+            return req.hostname + '.' + key + '.' + serv;
           };
         });
 
         it('should call increment with the good key', function (){
-          profiler.increment({'hostname': "host", "_id" : 3}, 'html-parser');
-          sinon.assert.calledWithExactly(increment, 'host.html-parser', 1);
+          profiler.increment('html-parser', {'hostname': "host"}, 'server1');
+          sinon.assert.calledWithExactly(increment, 'host.html-parser.server1', 1);
         });
       });
     });
