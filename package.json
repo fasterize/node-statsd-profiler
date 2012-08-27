@@ -1,7 +1,7 @@
 {
   "name": "statsd-profiler",
-  "description": "export one method 'measure' and read in a conf file the metrics",
-  "keywords": ["statsd"],
+  "description": "It's a `node-statsd` library for people for whom clean code is important.",
+  "keywords": ["statsd" ,"profiler"],
   "version": "0.0.1",
   "author": "Anthony BARRE <anthony.barre87@gmail.com>",
   "main": "./statsd-profiler.js",
