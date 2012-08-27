@@ -19,7 +19,7 @@ profiler.init(stastdHost, stastdPort, [stastdconf = {}, defaultSampleRate = 1, t
 ```js
 profiler.increment(key, [transformKeyArgs]);
 ```
-
+Alias : `count`
 ##decrement
 
 ```js
