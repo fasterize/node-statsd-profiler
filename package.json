@@ -4,7 +4,7 @@
   "keywords": ["statsd" ,"profiler"],
   "version": "0.0.1",
   "author": "Anthony BARRE <anthony.barre87@gmail.com>",
-  "main": "./statsd-profiler.js",
+  "main": "./lib/statsd-profiler.js",
   "repositories": [
        {
            "type": "git",
