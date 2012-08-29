@@ -9,7 +9,7 @@ Note : the initialization has to be done only once.
 
 ```
 var profiler = require('statsd-profiler');
-profiler.init(stastdHost, stastdPort, [stastdconf = {}, defaultSampleRate = 1, transformKey]);
+profiler.init(stastdAddress, [stastdconf = {}, defaultSampleRate = 1, transformKey, cleanTimer = 5000]);
 ```
 
 #same function as statsd

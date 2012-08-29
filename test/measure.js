@@ -23,7 +23,7 @@ describe('statsd-profiler', function(){
         timing = sinon.stub(profiler.StatsD.prototype, "timing");
         gauge = sinon.stub(profiler.StatsD.prototype, "gauge");
 
-        profiler.init('localhost', 3000, {
+        profiler.init('localhost:3000', {
           "js-parsing" : {},
           "html-dec" : {'type' : 'decrement'},
           "html-dec-2" : {'type' : 'decrement', 'sample_rate' : 0.7},
@@ -32,7 +32,7 @@ describe('statsd-profiler', function(){
           "req" : {'type' : 'timing'},
           "req2" : {'type' : 'timing'},
           "customKey" : {'key' : 'engine.metrics.html.size'}
-        });
+        }, 1, undefined, 500);
 
       });
 
@@ -113,7 +113,7 @@ describe('statsd-profiler', function(){
           sinon.assert.calledWithExactly(increment, 'engine.metrics.html.size', 1);
         });
 
-        it('should accept multiple StartTime and one EndTime', function () {
+        it('should accept multiple StartTime and one EndTime', function (done) {
           profiler.timeStart('req3');
           setTimeout(function () {
             profiler.timeStart('req3');
@@ -137,6 +137,35 @@ describe('statsd-profiler', function(){
         it('should call increment with the good key', function (){
           profiler.increment('html-parser', {'hostname': "host"}, 'server1');
           sinon.assert.calledWithExactly(increment, 'host.html-parser.server1', 1);
+        });
+      });
+
+      describe('customize measure' , function () {
+        before(function (){
+          profiler.transformKey = function (key, req, serv) {
+            return req.hostname + '.' + key + '.' + serv;
+          };
+        });
+
+        after(function () {
+          profiler.transformKey = function (key) {
+            return key;
+          };
+        });
+
+        it('should call increment with the good key', function (){
+          profiler.increment('html-parser', {'hostname': "host"}, 'server1');
+          sinon.assert.calledWithExactly(increment, 'host.html-parser.server1', 1);
+        });
+      });
+
+      describe('clear timer' , function () {
+        it('should clear all the timer superior to 10 sec', function (done){
+          profiler.timeStart('timer');
+          setTimeout(function () {
+            should.strictEqual(undefined, profiler.timer['timer']);
+            done();
+          }, 1000);
         });
       });
     });
