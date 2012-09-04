@@ -1,24 +1,28 @@
 node-statsd-profiler
 ====================
 
-It's a `node-statsd` library for people for whom clean code is important.
+A [node-statsd](https://github.com/sivy/node-statsd/) fork with helpers for timing, key aliases and dynamic keys.
 
 #initialization
 
-Note : the initialization has to be done only once.
+Initialization has to be done only once.
+So you can use your statsd module globally.
 
-```
+```js
 var profiler = require('statsd-profiler');
 profiler.init(options);
 ```
-The options are :
 
-stastdAddress : address of the statsd server
-stastdconf : json containing the conf for the metrics. See the section Config file : don't pollute your source code!
-defaultSampleRate : amount of data that statsd will send to graphite
-transformKey : function that receive the key in parameter and transform it
-cleanTimer : all the timer with more that X millisec will be cleared
-
+Options and defaults:
+```js
+{
+  stastdAddress: undefined, // address of the statsd server
+  stastdconf: {}, // key aliases, see `Key aliases`
+  defaultSampleRate: 1, // statsd sample rate, 1/10th of the time,
+  transformKey: function(key) {return key}, // so that you can easily add dynamic prefix, suffixes
+  cleanTimer: 5000 // When to cancel timeStart() requests that did not met a timeEnd()? In ms.
+}
+```
 #same function as statsd
 
 ##increment
@@ -60,10 +64,10 @@ profiler.timeEnd(key, [timeID], [transformKeyArgs]);
 
 You can specify timeID if key is used for multiple measures concurrently.
 
-#Config file : don't pollute your source code!
+#Key aliases
 
-In the config file, specify the parameters for your metrics.
-You can create an config for each metric : with a key, a measure `type` and a `sample rate`. Each parameter is optional.
+With key aliases you can easily set complex keys and sample rate alias a cool name.
+You can create an config for each metric : with a `key`, a measure `type` and a `sample rate`. Each parameter is optional.
 
 For instance, in conf object.
 
@@ -91,12 +95,13 @@ And after, in you code, you can simply write :
 ```
 
 and the actual call to statsd will be
-```
+
+```js
   statsd.increment("engine.optimization.html.parse.count", 0.9);
   statsd.timing("engine.optimization.html.parse.timing", computedTime, 0.3);
 ```
 
-#transformKey : compute dynamically the key
+#transformKey : dynamically compute the key
 
 Often, we want add a prefix or a suffix to our keys like the hostname, the server id...
 You can do that with the function `transformKey`.
@@ -109,7 +114,6 @@ function transformKey(key, [args1 , args2, ...]);
 Example:
 
 ```js
-
   profiler.transformKey = function (key, serverID) {
     return serverID + '.' + key;
   });
