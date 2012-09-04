@@ -23,17 +23,22 @@ describe('statsd-profiler', function(){
         timing = sinon.stub(profiler.StatsD.prototype, "timing");
         gauge = sinon.stub(profiler.StatsD.prototype, "gauge");
 
-        profiler.init('localhost:3000', {
-          "js-parsing" : {},
-          "html-dec" : {'type' : 'decrement'},
-          "html-dec-2" : {'type' : 'decrement', 'sample_rate' : 0.7},
-          "html-size" : {'type' : 'gauge'},
-          "html-size-rate" : {'type' : 'gauge', 'sample_rate' : 0.6},
-          "req" : {'type' : 'timing'},
-          "req2" : {'type' : 'timing'},
-          "customKey" : {'key' : 'engine.metrics.html.size'}
-        }, 1, undefined, 500);
-
+        profiler.init({
+          stastdAddress : 'localhost:3000',
+          stastdconf: {
+            "js-parsing" : {},
+            "html-dec" : {'type' : 'decrement'},
+            "html-dec-2" : {'type' : 'decrement', 'sample_rate' : 0.7},
+            "html-size" : {'type' : 'gauge'},
+            "html-size-rate" : {'type' : 'gauge', 'sample_rate' : 0.6},
+            "req" : {'type' : 'timing'},
+            "req2" : {'type' : 'timing'},
+            "customKey" : {'key' : 'engine.metrics.html.size'}
+          },
+          defaultSampleRate: 1,
+          transformKey: undefined,
+          cleanTimer: 500
+        });
       });
 
       describe('without any config', function () {

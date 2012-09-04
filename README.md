@@ -9,8 +9,15 @@ Note : the initialization has to be done only once.
 
 ```
 var profiler = require('statsd-profiler');
-profiler.init(stastdAddress, [stastdconf = {}, defaultSampleRate = 1, transformKey, cleanTimer = 5000]);
+profiler.init(options);
 ```
+The options are :
+
+stastdAddress : address of the statsd server
+stastdconf : json containing the conf for the metrics. See the section Config file : don't pollute your source code!
+defaultSampleRate : amount of data that statsd will send to graphite
+transformKey : function that receive the key in parameter and transform it
+cleanTimer : all the timer with more that X millisec will be cleared
 
 #same function as statsd
 
