@@ -12,7 +12,9 @@
        }
    ],
   "dependencies": {
-    "node-statsd": "git://github.com/sivy/node-statsd.git",
+    "node-statsd": "git://github.com/sivy/node-statsd.git"
+  },
+  "devDependencies" : {
     "mocha" : "1.4.x",
     "should": "1.1.x",
     "sinon" : "1.4.2"
