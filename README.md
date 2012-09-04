@@ -1,7 +1,7 @@
 node-statsd-profiler
 ====================
 
-A [node-statsd](https://github.com/sivy/node-statsd/) fork with helpers for timing, key aliases and dynamic keys.
+A [node-statsd](https://github.com/sivy/node-statsd/) fork with helpers for timing, key aliases, dynamic keys and method chaining.
 
 #initialization
 
@@ -123,4 +123,10 @@ Example:
   //will send
   statsd.increment("server1.test", 1);
 };
+```
+
+#chaining
+
+```js
+  profiler.method().method()
 ```

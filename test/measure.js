@@ -70,6 +70,12 @@ describe('statsd-profiler', function(){
             done();
           }, 10);
         });
+
+        it ('supports chained calls', function() {
+          profiler
+            .timeStart("html-parser")
+            .timeStart("html-parser2");
+        })
       });
 
       describe('with a config', function () {
@@ -173,6 +179,7 @@ describe('statsd-profiler', function(){
           }, 1000);
         });
       });
+
     });
   });
 });
