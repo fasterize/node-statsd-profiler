@@ -24,8 +24,8 @@ describe('statsd-profiler', function(){
         gauge = sinon.stub(profiler.StatsD.prototype, "gauge");
 
         profiler.init({
-          stastdAddress : 'localhost:3000',
-          stastdconf: {
+          host: 'localhost:3000',
+          aliases: {
             "js-parsing" : {},
             "html-dec" : {'type' : 'decrement'},
             "html-dec-2" : {'type' : 'decrement', 'sample_rate' : 0.7},

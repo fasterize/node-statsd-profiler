@@ -16,8 +16,8 @@ profiler.init(options);
 Options and defaults:
 ```js
 {
-  statsdAddress: undefined, // address of the statsd server
-  statsdconf: {}, // key aliases, see `Key aliases`
+  host: undefined, // ip:port of the statsd server
+  aliases: {}, // key aliases, see `Key aliases`
   defaultSampleRate: 1, // statsd sample rate, 1/10th of the time,
   transformKey: function(key) {return key}, // so that you can easily add dynamic prefix, suffixes
   cleanTimer: 5000 // When to cancel timeStart() requests that did not met a timeEnd()? In ms.
