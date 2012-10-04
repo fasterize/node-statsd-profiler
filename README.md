@@ -38,10 +38,21 @@ profiler.decrement(key, [transformKeyArgs]);
 ```
 
 ##gauge
+Note : with gauge, during the interval, only the last value is sent to graphite.
+The last value is sent to graphite even if no new values as been received.
+Ideal for queue size...
 
 ```js
 profiler.gauge(key, val, [transformKeyArgs]);
 ```
+
+##count
+```js
+profiler.count(key, val, [transformKeyArgs]);
+```
+Sum up all the data received.
+Ideal for monitoring the size of request...
+All the request size will be added.
 
 ##timing
 

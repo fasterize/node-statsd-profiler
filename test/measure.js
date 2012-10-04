@@ -14,7 +14,7 @@ describe('statsd-profiler', function(){
     });
 
     describe('after an init', function () {
-      var constructor, increment, decrement, timing, gauge;
+      var constructor, increment, decrement, timing, gauge, update_stats;
 
       before(function () {
         //stub statsd
@@ -22,6 +22,7 @@ describe('statsd-profiler', function(){
         decrement = sinon.stub(profiler.StatsD.prototype, "decrement");
         timing = sinon.stub(profiler.StatsD.prototype, "timing");
         gauge = sinon.stub(profiler.StatsD.prototype, "gauge");
+        update_stats = sinon.stub(profiler.StatsD.prototype, "update_stats");
 
         profiler.init({
           host: 'localhost:3000',
@@ -45,6 +46,11 @@ describe('statsd-profiler', function(){
         it ('increment should call statsd.increment', function () {
           profiler.increment("html-parser");
           sinon.assert.calledWithExactly(increment, 'html-parser', 1);
+        });
+
+        it ('count should call statsd.update_stats', function () {
+          profiler.count("html-size", 300);
+          sinon.assert.calledWithExactly(update_stats, 'html-size', 300, 1);
         });
 
         it ('decrement should call statsd.decrement', function () {
