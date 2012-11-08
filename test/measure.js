@@ -100,16 +100,7 @@ describe('statsd-profiler', function(){
           sinon.assert.calledWithExactly(gauge, 'html-size-rate', 300, 0.6);
         });
 
-        it ('should call statsd.timing for req', function (done) {
-          profiler.measure({ key : "req"});
-          setTimeout(function () {
-            profiler.measure({ key : "req"});
-            sinon.assert.calledWith(timing, 'req');
-            done();
-          }, 10);
-        });
-
-        it ('should call statsd.timing for req', function (done) {
+        it ('should call statsd.timing for req and req2', function (done) {
           profiler.timeStart("req2", "timerID");
           profiler.timeStart("req2", "timerID2");
 
@@ -183,6 +174,20 @@ describe('statsd-profiler', function(){
             should.strictEqual(undefined, profiler.timer['timer']);
             done();
           }, 1000);
+        });
+      });
+
+      describe('with undefined value' , function () {
+
+        it('should not call statsd with an undefined value ', function (){
+          profiler.timing("html-parser", undefined);
+          sinon.assert.neverCalledWith(timing, "html-parser", undefined);
+
+          profiler.count("html-parser", undefined);
+          sinon.assert.neverCalledWith(update_stats, "html-parser", undefined);
+
+          profiler.gauge("html-parser", undefined);
+          sinon.assert.neverCalledWith(gauge, "html-parser", undefined);
         });
       });
 
