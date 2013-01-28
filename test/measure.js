@@ -71,10 +71,22 @@ describe('statsd-profiler', function(){
         it ('timeStart and timeEnd should call statsd.timing', function (done) {
           profiler.timeStart("html-parser");
           setTimeout(function () {
-            profiler.timeEnd("html-parser");
+            var result = profiler.timeEnd("html-parser");
             sinon.assert.calledWith(timing, 'html-parser');
+            result.should.be.above(0);
             done();
           }, 10);
+        });
+
+        it ('timeStart and timeEnd should return 0 when no time has passed', function () {
+          var clock = sinon.useFakeTimers(),
+              result;
+
+          profiler.timeStart("html-parser");
+          result = profiler.timeEnd("html-parser");
+
+          clock.restore();
+          result.should.equal(0);
         });
       });
 
