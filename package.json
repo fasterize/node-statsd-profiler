@@ -2,7 +2,7 @@
   "name": "statsd-profiler",
   "description": "It's a `node-statsd` library for people for whom clean code is important.",
   "keywords": ["statsd" ,"profiler"],
-  "version": "0.2.7",
+  "version": "0.2.8",
   "author": "Anthony BARRE <anthony.barre87@gmail.com>",
   "main": "./lib/statsd-profiler.js",
   "repositories": [
