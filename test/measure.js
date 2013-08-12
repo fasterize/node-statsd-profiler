@@ -73,7 +73,7 @@ describe('statsd-profiler', function(){
           setTimeout(function () {
             var result = profiler.timeEnd("html-parser");
             sinon.assert.calledWith(timing, 'html-parser');
-            result.should.be.above(0);
+            result.val.should.be.above(0);
             done();
           }, 10);
         });
@@ -86,7 +86,7 @@ describe('statsd-profiler', function(){
           result = profiler.timeEnd("html-parser");
 
           clock.restore();
-          result.should.equal(0);
+          result.val.should.equal(0);
         });
       });
 
