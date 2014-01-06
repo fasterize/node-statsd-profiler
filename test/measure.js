@@ -14,7 +14,7 @@ describe('statsd-profiler', function(){
     });
 
     describe('after an init', function () {
-      var constructor, increment, decrement, timing, gauge, update_stats;
+      var constructor, increment, decrement, timing, gauge, set;
 
       before(function () {
         //stub statsd
@@ -22,7 +22,7 @@ describe('statsd-profiler', function(){
         decrement = sinon.stub(profiler.StatsD.prototype, "decrement");
         timing = sinon.stub(profiler.StatsD.prototype, "timing");
         gauge = sinon.stub(profiler.StatsD.prototype, "gauge");
-        update_stats = sinon.stub(profiler.StatsD.prototype, "update_stats");
+        set = sinon.stub(profiler.StatsD.prototype, "set");
 
         profiler.init({
           host: 'localhost:3000',
@@ -48,9 +48,9 @@ describe('statsd-profiler', function(){
           sinon.assert.calledWithExactly(increment, 'html-parser', 1);
         });
 
-        it ('count should call statsd.update_stats', function () {
+        it ('count should call statsd.set', function () {
           profiler.count("html-size", 300);
-          sinon.assert.calledWithExactly(update_stats, 'html-size', 300, 1);
+          sinon.assert.calledWithExactly(set, 'html-size', 300, 1);
         });
 
         it ('decrement should call statsd.decrement', function () {
@@ -190,7 +190,7 @@ describe('statsd-profiler', function(){
           sinon.assert.neverCalledWith(timing, "html-parser", undefined);
 
           profiler.count("html-parser", undefined);
-          sinon.assert.neverCalledWith(update_stats, "html-parser", undefined);
+          sinon.assert.neverCalledWith(set, "html-parser", undefined);
 
           profiler.gauge("html-parser", undefined);
           sinon.assert.neverCalledWith(gauge, "html-parser", undefined);
