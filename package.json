@@ -2,7 +2,7 @@
   "name": "statsd-profiler",
   "description": "It's a `node-statsd` library for people for whom clean code is important.",
   "keywords": ["statsd" ,"profiler"],
-  "version": "0.2.9",
+  "version": "0.2.10",
   "author": "Anthony BARRE <anthony.barre87@gmail.com>",
   "main": "./lib/statsd-profiler.js",
   "repositories": [
@@ -12,7 +12,7 @@
        }
    ],
   "dependencies": {
-    "node-statsd": "git://github.com/vvo/node-statsd.git#v0.0.4"
+    "node-statsd": "0.0.7"
   },
   "devDependencies" : {
     "mocha" : "1.4.x",
