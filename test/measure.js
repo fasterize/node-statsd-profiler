@@ -197,6 +197,36 @@ describe('statsd-profiler', function(){
         });
       });
 
+      describe('with null key' , function () {
+        it('should not call statsd with a Null key by timing ', function (){
+          // make sure that 999999 are only used in this test
+          profiler.timing(null, 999999);
+          sinon.assert.neverCalledWith(timing,sinon.match.any , 999999);
+        });
+
+        it('count should not call statsd with a Null key by count', function (){
+          profiler.count(null, 999999);
+          sinon.assert.neverCalledWith(set, sinon.match.any, 999999);
+        });
+
+        it('should not call statsd with a Null key by gauge', function (){
+          profiler.gauge(null, 999999);
+          sinon.assert.neverCalledWith(gauge, sinon.match.any, 999999);
+        });
+
+        it ('should not call statsd.timing with a Null key by timerStart/End', function (done) {
+          var lessThan5 = sinon.match(function (value) {
+            return (value < 5);
+          }, "lessThan");
+
+          profiler.timeStart(null, "timerID");
+          setTimeout(function () {
+            profiler.timeEnd(null, "timerID");
+            sinon.assert.neverCalledWith(timing, sinon.match.number, lessThan5 );
+            done();
+          }, 0);
+        });
+      });
     });
   });
 });
