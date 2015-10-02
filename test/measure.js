@@ -53,6 +53,16 @@ describe('statsd-profiler', function(){
           sinon.assert.calledWithExactly(set, 'html-size', 300, 1);
         });
 
+        it ('set should call statsd.set', function () {
+          profiler.set("html-size", 300);
+          sinon.assert.calledWithExactly(set, 'html-size', 300, 1);
+        });
+
+        it ('unique should call statsd.set', function () {
+          profiler.unique("html-size", 300);
+          sinon.assert.calledWithExactly(set, 'html-size', 300, 1);
+        });
+
         it ('decrement should call statsd.decrement', function () {
           profiler.decrement("html-parser");
           sinon.assert.calledWithExactly(decrement, 'html-parser', 1);
