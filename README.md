@@ -46,13 +46,22 @@ Ideal for queue size...
 profiler.gauge(key, val, [transformKeyArgs]);
 ```
 
-##count
+##count or set or unique
 ```js
 profiler.count(key, val, [transformKeyArgs]);
+profiler.set(key, val, [transformKeyArgs]);
+profiler.unique(key, val, [transformKeyArgs]);
 ```
-Sum up all the data received.
-Ideal for monitoring the size of request...
-All the request size will be added.
+Counts the unique occurences of events between flushes, using a Set to store all occuring events.
+
+Example submission in a single flush interval, that would result in a count of 3:
+```js
+profiler.set("unique_urls", "/foo");
+profiler.set("unique_urls", "/bar");
+profiler.set("unique_urls", "/baz");
+profiler.set("unique_urls", "/foo");
+profiler.set("unique_urls", "/foo");
+```
 
 ##timing
 
