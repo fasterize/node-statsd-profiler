@@ -106,7 +106,7 @@ describe('statsd-profiler', function(){
           sinon.assert.calledWithExactly(decrement, 'html-dec', 1);
         });
 
-        it ('should callstatsd.decrement for html-dec-2 with sample-rate=0.7', function () {
+        it ('should call statsd.decrement for html-dec-2 with sample-rate=0.7', function () {
           profiler.measure({key : "html-dec-2"});
           sinon.assert.calledWithExactly(decrement, 'html-dec-2', 0.7);
         });
@@ -153,12 +153,12 @@ describe('statsd-profiler', function(){
       describe('customize measure' , function () {
         before(function (){
 
-          profiler.transformKey = function (key, req, serv) {
+          profiler.defaultProfiler.transformKey = function (key, req, serv) {
             return req.hostname + '.' + key + '.' + serv;
           };
         });
 
-        it('should call increment with the good key', function (){
+        it('should call increment with the good key2', function (){
           profiler.increment('html-parser', {'hostname': "host"}, 'server1');
           sinon.assert.calledWithExactly(increment, 'host.html-parser.server1', 1);
         });
@@ -166,13 +166,13 @@ describe('statsd-profiler', function(){
 
       describe('customize measure' , function () {
         before(function (){
-          profiler.transformKey = function (key, req, serv) {
+          profiler.defaultProfiler.transformKey = function (key, req, serv) {
             return req.hostname + '.' + key + '.' + serv;
           };
         });
 
         after(function () {
-          profiler.transformKey = function (key) {
+          profiler.defaultProfiler.transformKey = function (key) {
             return key;
           };
         });
